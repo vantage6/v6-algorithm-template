@@ -5,7 +5,6 @@ algorithm_name:
 algorithm_description:
     type: str
     help: Please enter a short description of your algorithm.
-    default: banana
 
 open_source_license:
   type: str
