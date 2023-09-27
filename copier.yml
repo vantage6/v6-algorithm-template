@@ -1,0 +1,17 @@
+algorithm_name:
+    type: str
+    help: What is your algorithm name?
+
+algorithm_description:
+    type: str
+    help: Please enter a short description of your algorithm.
+    default: banana
+
+open_source_license:
+  type: str
+  help: "The open source license to use"
+  choices:
+    - "MIT"
+    - "Apache Software License 2.0"
+    - "GNU General Public License v3"
+    - "Not open source"
