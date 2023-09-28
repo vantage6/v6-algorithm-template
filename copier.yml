@@ -14,3 +14,8 @@ open_source_license:
     - "Apache Software License 2.0"
     - "GNU General Public License v3"
     - "Not open source"
+
+use_vpn:
+  type: bool
+  help: "Do you want to use the VPN network in your algorithm?"
+  default: false
