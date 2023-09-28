@@ -1,0 +1,40 @@
+"""
+This file contains all central algorithm functions. It is important to note
+that the central method is executed on a node, just like any other method.
+
+The results in a return statement are sent to the vantage6 server (after
+encryption if that is enabled).
+"""
+{% if has_central_function -%}
+{% if central_function_data -%}
+import pandas as pd
+{%- endif %}
+
+from vantage6.algorithm.tools.util import info, warn, error
+{% if central_function_client -%}
+from vantage6.algorithm.tools.decorators import algorithm_client
+{%- endif %}
+{% if central_function_data -%}
+from vantage6.algorithm.tools.decorators import data
+{%- endif %}
+{% if central_function_client -%}
+from vantage6.algorithm.client import AlgorithmClient
+{%- endif %}
+
+# TODO for loop over all databases
+{% if central_function_client and central_function_data -%}
+@algorithm_client
+@data({{central_function_number_databases}})
+def {{central_function_name}}(client: AlgorithmClient, df: pd.DataFrame) -> Any:
+{% elif central_function_client -%}
+@algorithm_client
+def {{central_function_name}}(client: AlgorithmClient) -> Any:
+{% elif central_function_data -%}
+@data({{central_function_number_databases}})
+def {{central_function_name}}(df: pd.DataFrame) -> Any:
+{% else -%}
+def {{central_function_name}}() -> Any:
+{%- endif %}    # TODO implement this function
+    pass
+
+{%- endif %}

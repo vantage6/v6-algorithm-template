@@ -10,12 +10,55 @@ open_source_license:
   type: str
   help: "The open source license to use"
   choices:
-    - "MIT"
-    - "Apache Software License 2.0"
-    - "GNU General Public License v3"
-    - "Not open source"
+    "MIT": mit
+    "Apache Software License 2.0": apache
+    "GNU General Public License v3": gpl
+    "No license (you can add one later)": no_license
 
+# -------------------- Define algorithm functions ---------- #
+
+has_central_function:
+  type: bool
+  help: "Do you want to use a central function in your algorithm?"
+  default: true
+
+central_function_name:
+  type: str
+  when: has_central_function
+  help: "What is the name of your central function?"
+  default: central
+
+central_function_client:
+  type: bool
+  when: has_central_function
+  help: "Do you want to use a client in your central function?"
+  default: true
+
+central_function_data:
+  type: bool
+  when: has_central_function
+  help: "Do you want to use data in your central function?"
+  default: true
+
+central_function_number_databases:
+  type: int
+  when: has_central_function and central_function_data
+  help: "How many databases do you want to use in your central function?"
+  default: 1
+
+
+
+# ----------------------- Set up VPN ----------------------- #
 use_vpn:
   type: bool
   help: "Do you want to use the VPN network in your algorithm?"
   default: false
+
+# Additional copier metadata
+_min_copier_version: "8.0.0"
+# _tasks:
+  # Remove license file if no license
+  # TODO this doesn't work yet on Windows, no 'rm' command... Maybe we can
+  # find an easier solution by handling this in the `v6 algorithm` command
+  # - "{% if open_source_license == 'no_license' %}rm LICENSE{% endif %}"
+  # TODO: similarly, delete if empty: central.py, partial.py
