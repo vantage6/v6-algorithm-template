@@ -4,7 +4,7 @@ algorithm_name:
 
 algorithm_description:
     type: str
-    help: Please enter a short description of your algorithm.
+    help: Please enter a short description (one sentence) of your algorithm.
 
 open_source_license:
   type: str
@@ -24,27 +24,28 @@ has_central_function:
 
 central_function_name:
   type: str
-  when: has_central_function
+  when: "{{ has_central_function }}"
   help: "What is the name of your central function?"
   default: central
 
 central_function_client:
   type: bool
-  when: has_central_function
+  when: "{{ has_central_function }}"
   help: "Do you want to use a client in your central function?"
   default: true
 
 central_function_data:
   type: bool
-  when: has_central_function
+  when: "{{ has_central_function }}"
   help: "Do you want to use data in your central function?"
   default: false
 
 central_function_number_databases:
   type: int
-  when: has_central_function and central_function_data
+  when: "{{ has_central_function and central_function_data }}"
   help: "How many databases do you want to use in your central function?"
   default: 1
+  validator: "{% if central_function_number_databases < 1 %}Must be at least 1{% endif %}"
 
 # ------------- Define partial algorithm function ---------- #
 
@@ -55,27 +56,28 @@ has_partial_function:
 
 partial_function_name:
   type: str
-  when: has_partial_function
+  when: "{{ has_partial_function }}"
   help: "What is the name of your partial function?"
   default: partial
 
 partial_function_client:
   type: bool
-  when: has_partial_function
+  when: "{{ has_partial_function }}"
   help: "Do you want to use a client in your partial function?"
   default: false
 
 partial_function_data:
   type: bool
-  when: has_partial_function
+  when: "{{ has_partial_function }}"
   help: "Do you want to use data in your partial function?"
   default: true
 
 partial_function_number_databases:
   type: int
-  when: has_partial_function and partial_function_data
+  when: "{{ has_partial_function and partial_function_data }}"
   help: "How many databases do you want to use in your partial function?"
   default: 1
+  validator: "{% if partial_function_number_databases < 1 %}Must be at least 1{% endif %}"
 
 # ----------------------- Set up VPN ----------------------- #
 use_vpn:
@@ -92,10 +94,15 @@ _min_copier_version: "8.0.0"
   # - "{% if open_source_license == 'no_license' %}rm LICENSE{% endif %}"
   # TODO: similarly, delete if empty: central.py, partial.py
 _message_after_copy: |
-    Your algorithm "{{algorith_name}}" has been created successfully!
+  Your algorithm template "{{ algorith_name }}" has been created successfully!
 
-    Checkout the README.md file for more information on how to get started. It
-    contains a checklist to help you further develop your algorithm.
+  Checkout the README.md file for more information on how to get started. It
+  contains a checklist to help you further develop your algorithm.
+_message_before_copy: |
+  Welcome to the vantage6 algorithm template creator!
+
+  You will be asked a series of questions to generate the basis of your new
+  vantage6 algorithm in Python.
 _envops:
   # Jinja settings to remove whitespace
   lstrip_blocks: true
