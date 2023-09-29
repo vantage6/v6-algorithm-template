@@ -9,6 +9,7 @@ encryption if that is enabled).
     {% if central_function_data -%}
     import pandas as pd
     {% endif %}
+from typing import Any
 
 from vantage6.algorithm.tools.util import info, warn, error
     {% if central_function_client %}
@@ -23,8 +24,8 @@ from vantage6.algorithm.client import AlgorithmClient
 
     {# TODO for loop over all databases #}
     {% if central_function_client and central_function_data -%}
-@algorithm_client
 @data({{central_function_number_databases}})
+@algorithm_client
 def {{central_function_name}}(client: AlgorithmClient,
         {%- for db_num in range(central_function_number_databases)-%}
             {{" "}}df{{db_num + 1}}: pd.DataFrame
@@ -62,10 +63,14 @@ def {{central_function_name}}() -> Any:
     # Define input parameters for a subtask
     info("Defining input parameters")
     input_ = {
-        {# TODO check for partial function name #}
+        {% if has_partial_function %}
+        "method": "{{partial_function_name}}",
+        {% else %}
+        # TODO you should define a federated method here
         "method": "some_example_method",
+        {% endif %}
         "kwargs": {
-            "example_arg": "example_value"
+            # TODO define your input parameters here
         }
     }
 
@@ -102,6 +107,10 @@ def {{central_function_name}}() -> Any:
     info("Waiting for results")
     results = client.wait_for_results(task_id=task.get("id"))
     info("Results obtained!")
+
+    # TODO probably you want to aggregate or combine these results here.
+    # For instance:
+    # results = [sum(result) for result in results]
 
     # return the final results of the algorithm
     return results

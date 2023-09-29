@@ -10,6 +10,7 @@ or directly to the user (if they requested partial results).
     {% if partial_function_data -%}
 import pandas as pd
     {% endif %}
+from typing import Any
 
 from vantage6.algorithm.tools.util import info, warn, error
     {% if partial_function_client %}
@@ -24,8 +25,8 @@ from vantage6.algorithm.client import AlgorithmClient
 
     {# TODO for loop over all databases #}
     {% if partial_function_client and partial_function_data -%}
-@algorithm_client
 @data({{partial_function_number_databases}})
+@algorithm_client
 def {{partial_function_name}}(client: AlgorithmClient,
         {%- for db_num in range(partial_function_number_databases)-%}
             {{" "}}df{{db_num + 1}}: pd.DataFrame
@@ -55,7 +56,7 @@ def {{partial_function_name}}() -> Any:
     # TODO this is a simple example to show you how to return something simple.
     # Replace it by your own code
     info("Computing mean age by gender")
-    result = df[["Gender", "Age"]].groupby("Sex").mean()
+    result = df1[["Gender", "Age"]].groupby("Gender").mean()
 
     # Return results to the vantage6 server.
     # TODO make sure no privacy sensitive data is shared
