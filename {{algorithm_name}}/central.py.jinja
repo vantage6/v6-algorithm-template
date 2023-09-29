@@ -50,10 +50,10 @@ def {{central_function_name}}(
 def {{central_function_name}}() -> Any:
     {%- endif %}
     """ Central part of the algorithm """
+    {% if central_function_client %}
     # TODO implement this function. Below is an example of typical usage in a
     # central function.
 
-    {% if central_function_client %}
     # get all organizations (ids) within the collaboration so you can send a
     # task to them.
     organizations = client.organization.list()
@@ -105,6 +105,9 @@ def {{central_function_name}}() -> Any:
 
     # return the final results of the algorithm
     return results
+    {% else %}
+    # TODO write your own code here
+    return {'my_results': 'some_value'}
     {% endif %}
 
 

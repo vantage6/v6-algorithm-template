@@ -3,6 +3,67 @@ This file contains all partial algorithm functions, that are normally executed
 on all nodes for which the algorithm is executed.
 
 The results in a return statement are sent to the vantage6 server (after
-encryption if that is enabled). From there, they are sent to the central task
+encryption if that is enabled). From there, they are sent to the partial task
 or directly to the user (if they requested partial results).
 """
+{% if has_partial_function -%}
+    {% if partial_function_data -%}
+import pandas as pd
+    {% endif %}
+
+from vantage6.algorithm.tools.util import info, warn, error
+    {% if partial_function_client %}
+from vantage6.algorithm.tools.decorators import algorithm_client
+    {% endif %}
+    {% if partial_function_data %}
+from vantage6.algorithm.tools.decorators import data
+    {% endif %}
+    {% if partial_function_client %}
+from vantage6.algorithm.client import AlgorithmClient
+    {% endif %}
+
+    {# TODO for loop over all databases #}
+    {% if partial_function_client and partial_function_data -%}
+@algorithm_client
+@data({{partial_function_number_databases}})
+def {{partial_function_name}}(client: AlgorithmClient,
+        {%- for db_num in range(partial_function_number_databases)-%}
+            {{" "}}df{{db_num + 1}}: pd.DataFrame
+            {%- if not loop.last -%}
+                ,
+            {%- endif -%}
+        {%- endfor %}
+) -> Any:
+    {% elif partial_function_client -%}
+@algorithm_client
+def {{partial_function_name}}(client: AlgorithmClient) -> Any:
+    {% elif partial_function_data -%}
+@data({{partial_function_number_databases}})
+def {{partial_function_name}}(
+        {%- for db_num in range(partial_function_number_databases)-%}
+            df{{db_num + 1}}: pd.DataFrame
+            {%- if not loop.last -%}
+                ,{{" "}}
+            {%- endif -%}
+        {%- endfor %}
+) -> Any:
+    {% else -%}
+def {{partial_function_name}}() -> Any:
+    {%- endif %}
+    """ Decentral part of the algorithm """
+    {% if partial_function_data %}
+    # TODO this is a simple example to show you how to return something simple.
+    # Replace it by your own code
+    info("Computing mean age by gender")
+    result = df[["Gender", "Age"]].groupby("Sex").mean()
+
+    # Return results to the vantage6 server.
+    # TODO make sure no privacy sensitive data is shared
+    return result.to_dict()
+    {% else %}
+    # TODO write your own code here
+    return {'my_results': 'some_value'}
+    {% endif %}
+{%- endif %}
+
+# TODO Feel free to add more partial functions here.

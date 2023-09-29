@@ -1,0 +1,69 @@
+"""
+Run this script to test your algorithm locally (without building a Docker
+image) using the mock client.
+
+Run as:
+
+    python test.py
+
+In an environment where `vantage6-algorithm-tools` are installed. This can be
+done by running:
+
+    pip install vantage6-algorithm-tools
+"""
+from vantage6.algorithm.tools.mock_client import MockAlgorithmClient
+
+## Mock client
+client = MockAlgorithmClient(
+    datasets=[
+        {
+            "database": "test_data.csv",
+            "type": "csv",
+            "input_data": {}
+        },
+        {
+            "database": "test_data.csv",
+            "type": "csv",
+            "input_data": {}
+        }
+    ],
+    module="{{algorithm_name}}"
+)
+
+# list mock organizations
+organizations = client.organization.list()
+print(organizations)
+org_ids = [organization["id"] for organization in organizations]
+
+{% if has_central_function %}
+# Run the central method on 1 node and get the results
+central_task = client.task.create(
+    input_={
+        "method":"{{central_function_name}}",
+        "kwargs": {
+            # TODO add your function arguments here (if you have any)
+        }
+    },
+    organizations=[org_ids[0]],
+)
+results = client.wait_for_results(central_task.get("id"))
+print(results)
+{% endif %}
+
+{% if has_partial_function %}
+# Run the partial method for all organizations
+task = client.task.create(
+    input_={
+        "method":"{{partial_function_name}}",
+        "kwargs": {
+            # TODO add your function arguments here (if you have any)
+        }
+    },
+    organizations=org_ids
+)
+print(task)
+
+# Get the results from the task
+results = client.wait_for_results(task.get("id"))
+print(results)
+{% endif %}

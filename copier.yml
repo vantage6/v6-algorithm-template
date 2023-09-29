@@ -63,13 +63,13 @@ partial_function_client:
   type: bool
   when: has_partial_function
   help: "Do you want to use a client in your partial function?"
-  default: true
+  default: false
 
 partial_function_data:
   type: bool
   when: has_partial_function
   help: "Do you want to use data in your partial function?"
-  default: false
+  default: true
 
 partial_function_number_databases:
   type: int
@@ -92,9 +92,10 @@ _min_copier_version: "8.0.0"
   # - "{% if open_source_license == 'no_license' %}rm LICENSE{% endif %}"
   # TODO: similarly, delete if empty: central.py, partial.py
 _message_after_copy: |
-    Your algorithm "{{ algorith_name }}" has been created successfully!
+    Your algorithm "{{algorith_name}}" has been created successfully!
 
-    Blabla
+    Checkout the README.md file for more information on how to get started. It
+    contains a checklist to help you further develop your algorithm.
 _envops:
   # Jinja settings to remove whitespace
   lstrip_blocks: true
