@@ -10,7 +10,6 @@ COPY . /app
 RUN pip install /app
 
 {% if use_vpn %}
-
 # Specify the ports that are used for VPN communication, along with a label
 # that helps you identify them. As an example, port 8888 is used here. The label
 # must be specified as the port number with a 'p' prefix, e.g. 'p8888'.
@@ -18,7 +17,7 @@ RUN pip install /app
 # adding additional EXPOSE and LABEL commands.
 EXPOSE 8888
 LABEL p8888 = 'some_label'
-{%- endif %}
+{% endif %}
 
 # Set environment variable to make name of the package available within the
 # docker image.

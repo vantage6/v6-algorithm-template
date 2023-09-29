@@ -15,7 +15,7 @@ open_source_license:
     "GNU General Public License v3": gpl
     "No license (you can add one later)": no_license
 
-# -------------------- Define algorithm functions ---------- #
+# ------------- Define central algorithm function ---------- #
 
 has_central_function:
   type: bool
@@ -38,7 +38,7 @@ central_function_data:
   type: bool
   when: has_central_function
   help: "Do you want to use data in your central function?"
-  default: true
+  default: false
 
 central_function_number_databases:
   type: int
@@ -46,7 +46,36 @@ central_function_number_databases:
   help: "How many databases do you want to use in your central function?"
   default: 1
 
+# ------------- Define partial algorithm function ---------- #
 
+has_partial_function:
+  type: bool
+  help: "Do you want to use a partial function in your algorithm?"
+  default: true
+
+partial_function_name:
+  type: str
+  when: has_partial_function
+  help: "What is the name of your partial function?"
+  default: partial
+
+partial_function_client:
+  type: bool
+  when: has_partial_function
+  help: "Do you want to use a client in your partial function?"
+  default: true
+
+partial_function_data:
+  type: bool
+  when: has_partial_function
+  help: "Do you want to use data in your partial function?"
+  default: false
+
+partial_function_number_databases:
+  type: int
+  when: has_partial_function and partial_function_data
+  help: "How many databases do you want to use in your partial function?"
+  default: 1
 
 # ----------------------- Set up VPN ----------------------- #
 use_vpn:
@@ -62,3 +91,11 @@ _min_copier_version: "8.0.0"
   # find an easier solution by handling this in the `v6 algorithm` command
   # - "{% if open_source_license == 'no_license' %}rm LICENSE{% endif %}"
   # TODO: similarly, delete if empty: central.py, partial.py
+_message_after_copy: |
+    Your algorithm "{{ algorith_name }}" has been created successfully!
+
+    Blabla
+_envops:
+  # Jinja settings to remove whitespace
+  lstrip_blocks: true
+  trim_blocks: true

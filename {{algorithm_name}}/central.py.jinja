@@ -6,35 +6,108 @@ The results in a return statement are sent to the vantage6 server (after
 encryption if that is enabled).
 """
 {% if has_central_function -%}
-{% if central_function_data -%}
-import pandas as pd
-{%- endif %}
+    {% if central_function_data -%}
+    import pandas as pd
+    {% endif %}
 
 from vantage6.algorithm.tools.util import info, warn, error
-{% if central_function_client -%}
+    {% if central_function_client %}
 from vantage6.algorithm.tools.decorators import algorithm_client
-{%- endif %}
-{% if central_function_data -%}
+    {% endif %}
+    {% if central_function_data %}
 from vantage6.algorithm.tools.decorators import data
-{%- endif %}
-{% if central_function_client -%}
+    {% endif %}
+    {% if central_function_client %}
 from vantage6.algorithm.client import AlgorithmClient
-{%- endif %}
+    {% endif %}
 
-# TODO for loop over all databases
-{% if central_function_client and central_function_data -%}
+    {# TODO for loop over all databases #}
+    {% if central_function_client and central_function_data -%}
 @algorithm_client
 @data({{central_function_number_databases}})
-def {{central_function_name}}(client: AlgorithmClient, df: pd.DataFrame) -> Any:
-{% elif central_function_client -%}
+def {{central_function_name}}(client: AlgorithmClient,
+        {%- for db_num in range(central_function_number_databases)-%}
+            {{" "}}df{{db_num + 1}}: pd.DataFrame
+            {%- if not loop.last -%}
+                ,
+            {%- endif -%}
+        {%- endfor %}
+) -> Any:
+    {% elif central_function_client -%}
 @algorithm_client
 def {{central_function_name}}(client: AlgorithmClient) -> Any:
-{% elif central_function_data -%}
+    {% elif central_function_data -%}
 @data({{central_function_number_databases}})
-def {{central_function_name}}(df: pd.DataFrame) -> Any:
-{% else -%}
+def {{central_function_name}}(
+        {%- for db_num in range(central_function_number_databases)-%}
+            df{{db_num + 1}}: pd.DataFrame
+            {%- if not loop.last -%}
+                ,{{" "}}
+            {%- endif -%}
+        {%- endfor %}
+) -> Any:
+    {% else -%}
 def {{central_function_name}}() -> Any:
-{%- endif %}    # TODO implement this function
-    pass
+    {%- endif %}
+    """ Central part of the algorithm """
+    # TODO implement this function. Below is an example of typical usage in a
+    # central function.
+
+    {% if central_function_client %}
+    # get all organizations (ids) within the collaboration so you can send a
+    # task to them.
+    organizations = client.organization.list()
+    org_ids = [organization.get("id") for organization in organizations]
+
+    # Define input parameters for a subtask
+    info("Defining input parameters")
+    input_ = {
+        {# TODO check for partial function name #}
+        "method": "some_example_method",
+        "kwargs": {
+            "example_arg": "example_value"
+        }
+    }
+
+    # create a subtask for all organizations in the collaboration.
+    info("Creating subtask for all organizations in the collaboration")
+    task = client.task.create(
+        input_=input_,
+        organizations=org_ids,
+        name="My subtask",
+        description="This is a very important subtask"
+    )
+
+        {% if use_vpn %}
+    # To communicate over the VPN network, get the VPN addresses of the subtasks
+    vpn_addresses = client.vpn.get_child_addresses()
+    # Note that you can also use client.vpn.get_addresses() to not only get the
+    # subtasks.
+    # The variable `vpn_addresses` will be something like:
+    # {
+    #    [
+    #        'ip': '1.2.3.4',
+    #        'port': 5678,
+    #        'label': 'label_defined_in_dockerfile',
+    #        'organization_id': 1,
+    #        'task_id': 1, (task id of the subtask)
+    #        'parent_id': 1, (task id of this central task)
+    #    ], ... (one for each algorithm container)
+    # }
+    # Use the `ip` and `port` to communicate with the subtasks.
+    # TODO write your own code here to communicate with the subtasks.
+        {% endif %}
+
+    # wait for node to return results of the subtask.
+    info("Waiting for results")
+    results = client.wait_for_results(task_id=task.get("id"))
+    info("Results obtained!")
+
+    # return the final results of the algorithm
+    return results
+    {% endif %}
+
 
 {%- endif %}
+
+# TODO Feel free to add more central functions here.
