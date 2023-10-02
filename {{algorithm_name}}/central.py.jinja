@@ -53,7 +53,8 @@ from vantage6.algorithm.client import AlgorithmClient
         "method": "some_example_method",
         {% endif %}
         "kwargs": {
-            # TODO define your input parameters here
+            {% from 'macros/kwargs_definition.jinja' import kwargs_define %}
+            {{ kwargs_define(partial_function_name, partial_args, 3) }}
         }
     }
 

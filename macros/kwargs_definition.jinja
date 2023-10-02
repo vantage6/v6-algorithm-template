@@ -1,0 +1,10 @@
+{%- macro kwargs_define(func_name, func_args, num_indents) -%}
+    {%- if func_args -%}
+        # TODO add sensible values{{"\n"}}
+        {%- for arg in func_args -%}
+            {{"    "*num_indents}}"{{arg}}": "some_value",{{"\n"}}
+        {%- endfor -%}
+    {%- else -%}
+        # TODO define parameters for function '{{func_name}}'
+    {%- endif -%}
+{%- endmacro -%}

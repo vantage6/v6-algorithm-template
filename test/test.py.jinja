@@ -47,7 +47,8 @@ central_task = client.task.create(
     input_={
         "method":"{{central_function_name}}",
         "kwargs": {
-            # TODO add your function arguments here (if you have any)
+            {% from 'macros/kwargs_definition.jinja' import kwargs_define %}
+            {{ kwargs_define(central_function_name, central_args, 3) }}
         }
     },
     organizations=[org_ids[0]],
@@ -62,7 +63,8 @@ task = client.task.create(
     input_={
         "method":"{{partial_function_name}}",
         "kwargs": {
-            # TODO add your function arguments here (if you have any)
+            {% from 'macros/kwargs_definition.jinja' import kwargs_define %}
+            {{ kwargs_define(partial_function_name, partial_args, 3) }}
         }
     },
     organizations=org_ids
