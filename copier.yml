@@ -154,3 +154,4 @@ _exclude:
   # exclude jinja macro files from being copied to algorithm
   - macros
   - .git
+  - copier.yml
