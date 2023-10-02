@@ -1,0 +1,49 @@
+{% macro func_def(func_name, data_decorator, client_decorator, num_dbs,
+                  func_args) %}
+{# Data decorator #}
+{% if data_decorator -%}
+@data({{num_dbs}})
+{% endif -%}
+
+{# Algorithm client decorator #}
+{%- if client_decorator -%}
+@algorithm_client
+{% endif -%}
+{# Function definition #}
+def {{func_name}}(
+{{"    "}}{# <- Add 4 whitespaces before function args start  #}
+{# Add client argument #}
+{%- if client_decorator %}
+client: AlgorithmClient
+{%- endif -%}
+{# Add data arguments #}
+{%- if data_decorator -%}
+    {# Add comma if previous arguments exist #}
+    {%- if client_decorator -%}
+        ,{{" "}}
+    {%- endif -%}
+    {%- for db_num in range(num_dbs)-%}
+        df{{db_num + 1}}: pd.DataFrame
+        {%- if not loop.last -%}
+            ,{{" "}}
+        {%- endif -%}
+    {%- endfor %}
+{%- endif %}
+{# Add additional arguments to function #}
+{%- if func_args %}
+    {# Add comma if previous arguments exist #}
+    {%- if client_decorator or data_decorator -%}
+        ,{{" "}}
+    {%- endif -%}
+    {# Add arguments #}
+    {%- for arg in func_args-%}
+        {{arg}}
+        {%- if not loop.last -%}
+            ,{{" "}}
+        {%- endif -%}
+    {%- endfor %}
+{%- endif %}
+
+    {# Finalize function definition #}
+) -> Any:
+{% endmacro %}

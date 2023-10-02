@@ -22,37 +22,19 @@ from vantage6.algorithm.tools.decorators import data
 from vantage6.algorithm.client import AlgorithmClient
     {% endif %}
 
-    {# TODO for loop over all databases #}
-    {% if central_function_client and central_function_data -%}
-@data({{central_function_number_databases}})
-@algorithm_client
-def {{central_function_name}}(client: AlgorithmClient,
-        {%- for db_num in range(central_function_number_databases)-%}
-            {{" "}}df{{db_num + 1}}: pd.DataFrame
-            {%- if not loop.last -%}
-                ,
-            {%- endif -%}
-        {%- endfor %}
-) -> Any:
-    {% elif central_function_client -%}
-@algorithm_client
-def {{central_function_name}}(client: AlgorithmClient) -> Any:
-    {% elif central_function_data -%}
-@data({{central_function_number_databases}})
-def {{central_function_name}}(
-        {%- for db_num in range(central_function_number_databases)-%}
-            df{{db_num + 1}}: pd.DataFrame
-            {%- if not loop.last -%}
-                ,{{" "}}
-            {%- endif -%}
-        {%- endfor %}
-) -> Any:
-    {% else -%}
-def {{central_function_name}}() -> Any:
-    {%- endif %}
+
+{# Include the function definition from a macro #}
+{% from 'macros/function_definition.jinja' import func_def %}
+{{
+    func_def(
+        central_function_name, central_function_data, central_function_client,
+        central_function_number_databases, central_args
+    )
+}}
+    {# Implementation of the algorithm #}
     """ Central part of the algorithm """
     {% if central_function_client %}
-    # TODO implement this function. Below is an example of typical usage in a
+    # TODO implement this function. Below is an example of a simple but typical
     # central function.
 
     # get all organizations (ids) within the collaboration so you can send a
@@ -66,7 +48,8 @@ def {{central_function_name}}() -> Any:
         {% if has_partial_function %}
         "method": "{{partial_function_name}}",
         {% else %}
-        # TODO you should define a federated method here
+        # TODO you should define a federated method here (which should also be
+        # implemented in this repository)
         "method": "some_example_method",
         {% endif %}
         "kwargs": {
@@ -84,7 +67,7 @@ def {{central_function_name}}() -> Any:
     )
 
         {% if use_vpn %}
-    # To communicate over the VPN network, get the VPN addresses of the subtasks
+    # To communicate over the VPN network, get VPN addresses of the subtasks
     vpn_addresses = client.vpn.get_child_addresses()
     # Note that you can also use client.vpn.get_addresses() to not only get the
     # subtasks.

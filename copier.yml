@@ -85,6 +85,29 @@ use_vpn:
   help: "Do you want to use the VPN network in your algorithm?"
   default: false
 
+# ----------------------- Advanced ------------------------- #
+
+advanced:
+  type: bool
+  help: "Do you want to see the advanced options?"
+  default: false
+
+central_args:
+  type: json
+  when: "{{ advanced and has_central_function }}"
+  help: "Add a list of arguments to the central function '{{ central_function_name }}'"
+  default: ['arg1', ]
+  multiline: true
+
+partial_args:
+  type: json
+  when: "{{ advanced and has_partial_function }}"
+  help: "Add a list of arguments to the partial function '{{ partial_function_name }}'"
+  default: ['arg1', ]
+  multiline: true
+
+# ----------------------- Copier metadata ------------------ #
+
 # Additional copier metadata
 _min_copier_version: "8.0.0"
 # _tasks:
@@ -99,6 +122,7 @@ _message_after_copy: |
   Checkout the README.md file for more information on how to get started. It
   contains a checklist to help you further develop your algorithm.
 _message_before_copy: |
+
   Welcome to the vantage6 algorithm template creator!
 
   You will be asked a series of questions to generate the basis of your new
@@ -107,3 +131,7 @@ _envops:
   # Jinja settings to remove whitespace
   lstrip_blocks: true
   trim_blocks: true
+_exclude:
+  # exclude jinja macro files from being copied to algorithm
+  - macros
+  - .git

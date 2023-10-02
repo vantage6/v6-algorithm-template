@@ -23,34 +23,16 @@ from vantage6.algorithm.tools.decorators import data
 from vantage6.algorithm.client import AlgorithmClient
     {% endif %}
 
-    {# TODO for loop over all databases #}
-    {% if partial_function_client and partial_function_data -%}
-@data({{partial_function_number_databases}})
-@algorithm_client
-def {{partial_function_name}}(client: AlgorithmClient,
-        {%- for db_num in range(partial_function_number_databases)-%}
-            {{" "}}df{{db_num + 1}}: pd.DataFrame
-            {%- if not loop.last -%}
-                ,
-            {%- endif -%}
-        {%- endfor %}
-) -> Any:
-    {% elif partial_function_client -%}
-@algorithm_client
-def {{partial_function_name}}(client: AlgorithmClient) -> Any:
-    {% elif partial_function_data -%}
-@data({{partial_function_number_databases}})
-def {{partial_function_name}}(
-        {%- for db_num in range(partial_function_number_databases)-%}
-            df{{db_num + 1}}: pd.DataFrame
-            {%- if not loop.last -%}
-                ,{{" "}}
-            {%- endif -%}
-        {%- endfor %}
-) -> Any:
-    {% else -%}
-def {{partial_function_name}}() -> Any:
-    {%- endif %}
+
+{# Include the function definition from a macro #}
+{% from 'macros/function_definition.jinja' import func_def %}
+{{
+    func_def(
+        partial_function_name, partial_function_data, partial_function_client,
+        partial_function_number_databases, partial_args
+    )
+}}
+{# Implementation of partial algorithm #}
     """ Decentral part of the algorithm """
     {% if partial_function_data %}
     # TODO this is a simple example to show you how to return something simple.
