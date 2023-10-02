@@ -18,9 +18,6 @@ Please ensure to execute the following steps. The steps are also indicated with
 TODO statements in the generated code - so you can also simply search the
 code for TODO instead of following the checklist below.
 
-{%- if use_vpn %}
-- Review the EXPOSE and LABEL commands in the Dockerfile for VPN
-{%- endif %}
 - Include a URL to your code repository in setup.py.
 - Implement your algorithm functions.
   - You are free to add more arguments to the functions. Be sure to add them
@@ -28,6 +25,9 @@ code for TODO instead of following the checklist below.
   - When adding new arguments, if you run the `test/test.py` script, be sure
     to include values for these arguments in the `client.task.create()` calls
     that are available there.
+{% if use_vpn %}
+- Review the EXPOSE and LABEL commands in the Dockerfile for VPN
+{% endif %}
 - We strongly recommend adding documentation to your code. This will help
   others to understand your code and will help you to understand your own code
   in the future.
