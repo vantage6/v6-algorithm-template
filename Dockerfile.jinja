@@ -13,10 +13,17 @@ RUN pip install /app
 # Specify the ports that are used for VPN communication, along with a label
 # that helps you identify them. As an example, port 8888 is used here. The label
 # must be specified as the port number with a 'p' prefix, e.g. 'p8888'.
+    {% if vpn_expose %}
+        {%- for port_dict in vpn_expose %}
+EXPOSE {{port_dict.port}}
+LABEL p{{port_dict.port}} = '{{port_dict.label}}'
+        {% endfor %}
+    {% else %}
 # TODO provide a sensible label below. Feel free to add more ports if needed by
 # adding additional EXPOSE and LABEL commands.
 EXPOSE 8888
 LABEL p8888 = 'some_label'
+    {% endif %}
 {% endif %}
 
 # Set environment variable to make name of the package available within the

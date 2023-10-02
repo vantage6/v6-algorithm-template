@@ -47,6 +47,13 @@ central_function_number_databases:
   default: 1
   validator: "{% if central_function_number_databases < 1 %}Must be at least 1{% endif %}"
 
+central_args:
+  type: json
+  when: "{{ has_central_function }}"
+  help: "Add a list of arguments to the central function '{{ central_function_name }}'"
+  default: ['arg1', ]
+  multiline: true
+
 # ------------- Define partial algorithm function ---------- #
 
 has_partial_function:
@@ -79,6 +86,13 @@ partial_function_number_databases:
   default: 1
   validator: "{% if partial_function_number_databases < 1 %}Must be at least 1{% endif %}"
 
+partial_args:
+  type: json
+  when: "{{ has_partial_function }}"
+  help: "Add a list of arguments to the partial function '{{ partial_function_name }}'"
+  default: ['arg1', ]
+  multiline: true
+
 # ----------------------- Set up VPN ----------------------- #
 use_vpn:
   type: bool
@@ -92,19 +106,24 @@ advanced:
   help: "Do you want to see the advanced options?"
   default: false
 
-central_args:
+vpn_expose:
   type: json
-  when: "{{ advanced and has_central_function }}"
-  help: "Add a list of arguments to the central function '{{ central_function_name }}'"
-  default: ['arg1', ]
+  when: "{{ advanced and use_vpn }}"
+  help: |
+    Configure the ports to expose in the VPN. You can add multiple ports
+    by adding more dictionaries with keys 'label' and 'port'.
+  default: [{'port': 8888, 'label': 'my_label'}]
   multiline: true
+  validator: |
+    {% for port_dict in vpn_expose %}
+        {% if 'port' not in port_dict %}
+          Each dictionary should have a 'port' key.
+        {% endif %}
+        {% if 'label' not in port_dict %}
+          Each dictionary should have a 'label' key.
+        {% endif %}
+    {% endfor %}
 
-partial_args:
-  type: json
-  when: "{{ advanced and has_partial_function }}"
-  help: "Add a list of arguments to the partial function '{{ partial_function_name }}'"
-  default: ['arg1', ]
-  multiline: true
 
 # ----------------------- Copier metadata ------------------ #
 
