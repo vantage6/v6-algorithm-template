@@ -30,8 +30,7 @@ copier copy https://github.com/vantage6/v6-algorithm-template /path/to/my/new/al
 
 ## Updating an algorithm
 
-**Note that you can also make use of this when you have already implemented your
-algorithm!**
+*You can also do this when you have already implemented your algorithm!*
 
 This algorithm template generator may be updated for several reasons: it is
 extended with new questions to personalize your template further, it contains
