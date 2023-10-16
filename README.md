@@ -7,6 +7,9 @@ created. By answering a number of questions, a personalized template will be
 created that allows the algorithm developer to focus on the algorithm rather
 than on the infrastructure around it.
 
+The template generator used in the background is
+[copier](https://github.com/copier-org/copier).
+
 ## How to create an algorithm
 
 You can create your own vantage6 algorithm template by running
@@ -27,6 +30,9 @@ copier copy https://github.com/vantage6/v6-algorithm-template /path/to/my/new/al
 
 ## Updating an algorithm
 
+**Note that you can also make use of this when you have already implemented your
+algorithm!**
+
 This algorithm template generator may be updated for several reasons: it is
 extended with new questions to personalize your template further, it contains
 a bug, the vantage6 algorithm structure is updated, etc. In such cases, you
@@ -39,13 +45,13 @@ v6 algorithm update
 which will take the latest version of this repository and use it to update the
 algorithm code.
 
-Note that you can also make use of this when you have already implemented your
-algorithm!
+You can also use the copier CLI:
+
+```bash
+copier copy https://github.com/vantage6/v6-algorithm-template /path/to/my/new/algorithm
+```
 
 ## Developer instructions
-
-The template generator used in the background is
-[copier](https://github.com/copier-org/copier).
 
 To release a new version of the template generator, a new tag has to be added
 with the semantic versioning format (e.g. `1.2.3`). `Copier` does not use the
