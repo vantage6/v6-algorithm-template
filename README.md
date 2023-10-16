@@ -1,6 +1,6 @@
 # Create your vantage6 algorithm template
 
-## What does this repository contain
+## What does this repository contain?
 
 This repository contains template code from which new vantage6 algorithms can be
 created. By answering a number of questions, a personalized template will be
@@ -10,7 +10,7 @@ than on the infrastructure around it.
 The template generator used in the background is
 [copier](https://github.com/copier-org/copier).
 
-## How to create an algorithm
+## How to create your own algorithm?
 
 You can create your own vantage6 algorithm template by running
 
@@ -27,6 +27,9 @@ Alternatively, you can also run it outside of the vantage6 CLI:
 ```bash
 copier copy https://github.com/vantage6/v6-algorithm-template /path/to/my/new/algorithm
 ```
+
+After creating the template, follow the checklist in the README to complete your
+algorithm!
 
 ## Updating an algorithm
 
@@ -53,7 +56,7 @@ copier copy https://github.com/vantage6/v6-algorithm-template /path/to/my/new/al
 ## Developer instructions
 
 To release a new version of the template generator, a new tag has to be added
-with the semantic versioning format (e.g. `1.2.3`). `Copier` does not use the
+with the semantic versioning format (e.g. `1.2.3`). Copier does not use the
 latest on a certain main branch, but requires these tags to find the most recent
 version of the template. So to release a new version, do:
 
