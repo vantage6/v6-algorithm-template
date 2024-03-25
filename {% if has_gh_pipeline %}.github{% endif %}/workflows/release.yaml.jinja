@@ -1,0 +1,30 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+    create-docker-image:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+
+        - name: Login to Docker registry
+          uses: docker/login-action@v3
+          with:
+            {% if private_registry %}
+            registry: {{docker_registry}}
+            {% endif %}
+            username: ${{ '{{ secrets.DOCKER_USER }}' }}
+            password: ${{ '{{ secrets.DOCKER_PASSWORD }}' }}
+
+        - name: Run Makefile Rule
+          run: docker build -t {{docker_image}} .
+
+        - name: Push Docker image
+          run: |
+            docker push {{docker_image}}

@@ -55,6 +55,8 @@ copier copy https://github.com/vantage6/v6-algorithm-template /path/to/my/new/al
 
 ## Developer instructions
 
+### Release new version
+
 To release a new version of the template generator, a new tag has to be added
 with the semantic versioning format (e.g. `1.2.3`). Copier does not use the
 latest on a certain main branch, but requires these tags to find the most recent
@@ -67,3 +69,23 @@ git push origin x.y.z
 
 Note that we therefore do not follow the vantage6 way of defining tags with a
 `version/` prefix - this does not conform to the `copier` standard.
+
+### Developing new version
+
+When developing a new version of the template generator, you can test it by
+
+```bash
+copier copy --vcs-ref=HEAD . /path/to/my/new/algorithm
+```
+
+The `--vcs-ref=HEAD` flag will ensure that local changes are taken into account
+when generating the template. This is useful when developing new features because then
+it is not necessary to commit changes to test them.
+
+Also note the `--defaults` option to fill out the same answers to the questions as in
+the previous iteration, and the `-w` to overwrite files from last time without asking
+confirmation.
+
+```bash
+copier copy --vcs-ref=HEAD -w --defaults . /path/to/my/new/algorithm
+```

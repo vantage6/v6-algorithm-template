@@ -124,6 +124,34 @@ vpn_expose:
         {% endif %}
     {% endfor %}
 
+has_gh_pipeline:
+  type: bool
+  when: "{{ advanced }}"
+  help: "Do you want to use GitHub Actions for CI/CD?"
+  default: true
+
+private_registry:
+  type: bool
+  when: "{{ has_gh_pipeline }}"
+  help: "Do you want to use a private Docker registry?"
+  default: true
+
+docker_registry:
+  type: str
+  when: "{{ has_gh_pipeline and private_registry }}"
+  help: "The Docker registry to use for the GitHub Actions pipeline"
+  default: "harbor2.vantage6.ai"
+
+docker_image:
+  type: str
+  when: "{{ has_gh_pipeline }}"
+  help: "The Docker image name to use for the GitHub Actions pipeline"
+  default: |-
+    {%- if private_registry -%}
+      {{docker_registry}}/{{algorithm_name}}
+    {%- else -%}
+      {{algorithm_name}}
+    {%- endif -%}
 
 # ----------------------- Copier metadata ------------------ #
 

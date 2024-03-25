@@ -33,20 +33,37 @@ code for TODO instead of following the checklist below.
 - We strongly recommend adding documentation to your code. This will help
   others to understand your code and will help you to understand your own code
   in the future.
+{% if has_gb_pipeline %}
+- Create a ``DOCKER_USER`` and ``DOCKER_PASSWORD`` secret in the GitHub repository
+  settings. This will be used to push the Docker image to the registry in the github
+  pipeline.
+{% endif %}
 - Finally, remove this checklist section.
 
 ### Dockerizing your algorithm
 
 To finally run your algorithm on the vantage6 infrastructure, you need to
-create a docker image of your algorithm. This can be done by executing the
-following command in the root of your algorithm directory:
+create a Docker image of your algorithm.
+
+{% if has_gh_pipeline %}
+#### Automatically
+
+The easiest way to create a Docker image is to use the GitHub Actions pipeline to
+automatically build and push the Docker image. All that you need to do is push a
+commit to the ``main`` branch.
+
+#### Manually
+
+{% endif %}
+A Docker image can be created by executing the following command in the root of your
+algorithm directory:
 
 ```bash
 docker build -t [my_docker_image_name] .
 ```
 
 where you should provide a sensible value for the Docker image name. The
-`docker build` command will create a docker image that contains your algorithm.
+`docker build` command will create a Docker image that contains your algorithm.
 You can create an additional tag for it by running
 
 ```bash
