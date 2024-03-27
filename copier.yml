@@ -93,17 +93,42 @@ partial_args:
   default: ['arg1', ]
   multiline: true
 
-# ----------------------- Set up VPN ----------------------- #
-use_vpn:
+# ----------------------- Documentation --------------------- #
+
+has_docs:
   type: bool
-  help: "Do you want to use the VPN network in your algorithm?"
-  default: false
+  help: "Do you want to add documentation to your algorithm?"
+  default: true
+
+project_name:
+  type: str
+  when: "{{ has_docs }}"
+  help: "What is the name of your project?"
+  default: "{{ algorithm_name }}"
+
+author:
+  type: str
+  when: "{{ has_docs }}"
+  help: "Who are the authors of the project?"
+
+copyright:
+  type: str
+  when: "{{ has_docs }}"
+  help: "Please add a copyright message to include in the documentation."
+
 
 # ----------------------- Advanced ------------------------- #
 
 advanced:
   type: bool
   help: "Do you want to see the advanced options?"
+  default: true
+
+# ----------------------- Set up VPN ----------------------- #
+use_vpn:
+  type: bool
+  when: "{{ advanced }}"
+  help: "Do you want to use the VPN network in your algorithm?"
   default: false
 
 vpn_expose:
@@ -128,23 +153,28 @@ has_gh_pipeline:
   type: bool
   when: "{{ advanced }}"
   help: "Do you want to use GitHub Actions for CI/CD?"
-  default: true
+  default: "{{advanced}}"
 
 private_registry:
   type: bool
-  when: "{{ has_gh_pipeline }}"
+  when: "{{ advanced and has_gh_pipeline }}"
   help: "Do you want to use a private Docker registry?"
-  default: true
+  default: |-
+    {%- if advanced and has_gh_pipeline -%}
+      true
+    {%- else -%}
+      false
+    {%- endif -%}
 
 docker_registry:
   type: str
-  when: "{{ has_gh_pipeline and private_registry }}"
+  when: "{{ advanced and has_gh_pipeline and private_registry }}"
   help: "The Docker registry to use for the GitHub Actions pipeline"
-  default: "harbor2.vantage6.ai"
+  default: harbor2.vantage6.ai
 
 docker_image:
   type: str
-  when: "{{ has_gh_pipeline }}"
+  when: "{{ advanced and has_gh_pipeline }}"
   help: "The Docker image name to use for the GitHub Actions pipeline"
   default: |-
     {%- if private_registry -%}

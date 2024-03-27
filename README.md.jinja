@@ -33,10 +33,14 @@ code for TODO instead of following the checklist below.
 - We strongly recommend adding documentation to your code. This will help
   others to understand your code and will help you to understand your own code
   in the future.
-{% if has_gb_pipeline %}
+{% if has_gh_pipeline %}
 - Create a ``DOCKER_USER`` and ``DOCKER_PASSWORD`` secret in the GitHub repository
   settings. This will be used to push the Docker image to the registry in the github
   pipeline.
+{% endif %}
+{% if has_docs %}
+- Fill in the documentation template. This will help others to understand your
+  algorithm, be able to use it safely, and to contribute to it.
 {% endif %}
 - Finally, remove this checklist section.
 

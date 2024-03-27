@@ -1,0 +1,27 @@
+Implementation
+==============
+
+Overview
+--------
+
+{% if has_central_function %}
+Central (``{{central_function_name}}``)
+-----------------
+The central part is responsible for the orchestration and aggregation of the algorithm.
+
+.. Describe the central function here.
+
+{% endif %}
+{% if has_partial_function %}
+Partials
+--------
+Partials are the computations that are executed on each node. The partials have access
+to the data that is stored on the node. The partials are executed in parallel on each
+node.
+
+``{{partial_function_name}}``
+~~~~~~~~~~~~~~~~
+
+.. Describe the partial function.
+
+{% endif %}
