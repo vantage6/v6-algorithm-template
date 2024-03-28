@@ -25,6 +25,10 @@ available from that version onwards.
 Alternatively, you can also run it outside of the vantage6 CLI:
 
 ```bash
+# install required dependencies in your python environment
+pip install copier pyyaml
+
+# Create a new algorithm template
 copier copy https://github.com/vantage6/v6-algorithm-template /path/to/my/new/algorithm
 ```
 
@@ -50,6 +54,10 @@ algorithm code.
 You can also use the copier CLI:
 
 ```bash
+# install required dependencies in your python environment
+pip install copier pyyaml
+
+# Update an existing algorithm
 copier copy https://github.com/vantage6/v6-algorithm-template /path/to/my/new/algorithm
 ```
 

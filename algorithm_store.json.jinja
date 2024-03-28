@@ -1,0 +1,54 @@
+{
+  "name": "{{algorithm_name}}",
+  "image": "{{docker_image}}",
+  "vantage6_version": "4.3",
+  "partitioning": "horizontal",
+  "functions": [
+    {% if has_central_function %}
+    {
+      "name": "{{central_function_name}}",
+      "description": "{{algorithm_description}}",
+      "type": "central",
+      "databases": [
+        {% for idx in range(central_function_number_databases) %}
+        {
+        "name": "Database {{idx + 1}}"
+        }{%- if not loop.last -%},{%- endif -%}
+        {% endfor %}
+      ],
+      "arguments": [
+        {% for arg in central_args %}
+        {
+          "name": "{{arg}}",
+          "type": "",
+          "description": ""
+        }{%- if not loop.last %},{% else %}{{" "}}{%- endif -%}
+        {% endfor %}
+      ]
+    }{%- endif -%}
+    {%- if has_central_function and has_partial_function -%},{%- endif -%}
+    {% if has_partial_function -%}
+    {
+      "name": "{{partial_function_name}}",
+      "description": "",
+      "type": "federated",
+      "databases": [
+        {%- for idx in range(partial_function_number_databases) -%}
+          {
+          "name": "Database {{idx + 1}}"
+          }{%- if not loop.last -%},{%- endif -%}
+        {% endfor %}
+      ],
+      "arguments": [
+        {%- for arg in partial_args -%}
+        {
+          "name": "{{arg}}",
+          "type": "",
+          "description": ""
+        }{%- if not loop.last -%},{%- endif -%}
+        {% endfor %}
+      ]
+    }
+    {% endif %}
+  ]
+}
