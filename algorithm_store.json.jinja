@@ -1,7 +1,9 @@
 {
   "name": "{{algorithm_name}}",
   "image": "{{docker_image}}",
-  "vantage6_version": "4.3",
+  "vantage6_version": "4.6",
+  "code_url": "https://mygitrepo.org",
+  "documentation_url": "",
   "partitioning": "horizontal",
   "functions": [
     {% if has_central_function %}
@@ -10,9 +12,14 @@
       "description": "{{algorithm_description}}",
       "type": "central",
       "databases": [
+        {%- for idx in range(partial_function_number_databases) -%}
+          {
+          "name": "Partial database {{idx + 1}}"
+          }{%- if not loop.last or central_function_number_databases > 0 -%},{%- endif -%}
+        {% endfor %}
         {% for idx in range(central_function_number_databases) %}
         {
-        "name": "Database {{idx + 1}}"
+        "name": "Central database {{idx + 1}}"
         }{%- if not loop.last -%},{%- endif -%}
         {% endfor %}
       ],
