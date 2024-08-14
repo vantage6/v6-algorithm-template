@@ -14,7 +14,7 @@ The template generator used in the background is
 
 You can create your own vantage6 algorithm template by running
 
-``` bash
+```bash
 v6 algorithm create
 ```
 
@@ -37,7 +37,7 @@ algorithm!
 
 ## Updating an algorithm
 
-*You can also do this when you have already implemented your algorithm!*
+_You can also do this when you have already implemented your algorithm!_
 
 This algorithm template generator may be updated for several reasons: it is
 extended with new questions to personalize your template further, it contains
@@ -83,7 +83,7 @@ Note that we therefore do not follow the vantage6 way of defining tags with a
 When developing a new version of the template generator, you can test it by
 
 ```bash
-copier copy --vcs-ref=HEAD . /path/to/my/new/algorithm
+copier copy --trust --vcs-ref=HEAD . /path/to/my/new/algorithm
 ```
 
 The `--vcs-ref=HEAD` flag will ensure that local changes are taken into account
@@ -95,5 +95,5 @@ the previous iteration, and the `-w` to overwrite files from last time without a
 confirmation.
 
 ```bash
-copier copy --vcs-ref=HEAD -w --defaults . /path/to/my/new/algorithm
+copier copy --vcs-ref=HEAD -w --defaults --trust . /path/to/my/new/algorithm
 ```

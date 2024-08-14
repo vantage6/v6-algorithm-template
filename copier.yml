@@ -1,6 +1,10 @@
 algorithm_name:
     type: str
     help: What is your algorithm name?
+    validator: |-
+      {% if algorithm_name == 'test' %}
+        Algorithm name cannot be 'test'. This conflicts with generated test files.
+      {% endif %}
 
 algorithm_description:
     type: str
