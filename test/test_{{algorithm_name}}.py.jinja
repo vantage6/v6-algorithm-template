@@ -1,0 +1,80 @@
+from vantage6.cli.test.algo_test_scripts.algo_test_template import (
+    AlgoTestTemplate,
+    Result,
+)
+
+
+class {{algorithm_name}}Test(AlgoTestTemplate):
+    def __init__(self, client):
+        super().__init__(client)
+
+    # The test method must be implemented in order to automatically run
+    # the test script in the vantage6 CLI.
+    def test(
+        self,
+        algorithm_image: str | None = None,
+        input_: dict | None = None,
+        database: str | None = None,
+    ) -> Result:
+        """
+        Test the {{algorithm_name}} algorithm.
+
+        Parameters:
+        -----------
+        input_ : dict
+            The input for the algorithm.
+        database : str
+            The label of the database to use. Defaults to "default".
+
+        Returns:
+        --------
+        dict[str, bool]
+            A dictionary indicating the success of the test and the result.
+        """
+
+        # define the default location of the algorithm image
+        algorithm_image = algorithm_image or "harbor2.vantage6.ai/algorithms/{{algorithm_name}}"
+        database = database or "default"
+
+        # define the input of the test task.
+        # The method and column_name should be adjusted to the algorithm
+        input_ = input_ or {
+            "method": "method_name",
+            "args": [],
+            "kwargs": {"column_name": "column_name"},
+        }
+
+        # define the expected result of the test task
+        expected_result = "expected_result"
+
+        # Create the test task to run
+
+        task = self.client.task.create(
+            collaboration=1,
+            organizations=[1],
+            name="test_task",
+            image=algorithm_image,
+            description="",
+            input_=input_,
+            databases=[{"label": database}],
+        )
+
+        task_id = task["id"]
+
+        task_result = self.client.wait_for_results(task_id)
+
+        passed = True
+        try:
+            assert (
+                task_result.get("data")[0].get("result")
+                == expected_result
+            )
+        except AssertionError:
+            passed = False
+
+        return Result(passed=passed, result=task_result)
+
+# The get_test_class function must be implemented in order to
+# automatically run the test script in the vantage6 CLI.
+def get_test_class(client):
+    return {{algorithm_name}}Test(client)
