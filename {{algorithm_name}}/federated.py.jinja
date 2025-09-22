@@ -28,8 +28,8 @@ from vantage6.algorithm.client import AlgorithmClient
 {% from 'macros/function_definition.jinja' import func_def %}
 {{
     func_def(
-        partial_function_name, partial_function_data, partial_function_client,
-        partial_function_number_databases, partial_args
+        partial_function_name, "federated_compute", partial_function_number_databases,
+        partial_args,
     )
 }}
 {# Implementation of partial algorithm #}

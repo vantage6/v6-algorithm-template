@@ -32,33 +32,6 @@ central_function_name:
   help: "What is the name of your central function?"
   default: central
 
-central_function_client:
-  type: bool
-  when: "{{ has_central_function }}"
-  help: "Do you want to use a client in your central function?"
-  default: true
-
-central_function_data:
-  type: bool
-  when: "{{ has_central_function }}"
-  help: "Do you want to use data in your central function?"
-  default: false
-
-central_function_number_databases:
-  type: int
-  when: "{{ has_central_function and central_function_data }}"
-  help: "How many databases do you want to use in your central function?"
-  default: |-
-    {%- if has_central_function and central_function_data -%}
-      1
-    {%- else -%}
-      0
-    {%- endif -%}
-  validator: |-
-    {% if central_function_data and central_function_number_databases < 1 %}
-      Must be at least 1
-    {% endif %}
-
 central_args:
   type: json
   when: "{{ has_central_function }}"
@@ -66,50 +39,44 @@ central_args:
   default: ['arg1', ]
   multiline: true
 
-# ------------- Define partial algorithm function ---------- #
+# ------------- Define federated algorithm function ---------- #
 
-has_partial_function:
+has_federated_function:
   type: bool
-  help: "Do you want to use a partial function in your algorithm?"
+  help: "Do you want to use a federated function in your algorithm?"
   default: true
 
-partial_function_name:
+federated_function_name:
   type: str
-  when: "{{ has_partial_function }}"
-  help: "What is the name of your partial function?"
-  default: partial
+  when: "{{ has_federated_function }}"
+  help: "What is the name of your federated function?"
+  default: federated
 
-partial_function_client:
+federated_function_data:
   type: bool
-  when: "{{ has_partial_function }}"
-  help: "Do you want to use a client in your partial function?"
-  default: false
-
-partial_function_data:
-  type: bool
-  when: "{{ has_partial_function }}"
-  help: "Do you want to use data in your partial function?"
+  when: "{{ has_federated_function }}"
+  help: "Do you want to use data in your federated function?"
   default: true
 
-partial_function_number_databases:
+federated_function_number_databases:
   type: int
-  when: "{{ has_partial_function and partial_function_data }}"
-  help: "How many databases do you want to use in your partial function?"
+  when: "{{ has_federated_function and federated_function_data }}"
+  help: "How many databases do you want to use in your federated function?"
   default: |-
-    {%- if has_partial_function and partial_function_data -%}
+    {%- if has_federated_function and federated_function_data -%}
       1
     {%- else -%}
       0
     {%- endif -%}
   validator: |-
-    {% if has_partial_function and partial_function_number_databases < 1 %}
+    {% if has_federated_function and federated_function_number_databases < 1 %}
       Must be at least 1
     {% endif %}
 
-partial_args:
+federated_args:
   type: json
-  when: "{{ has_partial_function }}"
-  help: "Add a list of arguments to the partial function '{{ partial_function_name }}'"
+  when: "{{ has_federated_function }}"
+  help: "Add a list of arguments to the federated function '{{ federated_function_name }}'"
   default: ['arg1', ]
   multiline: true
 
@@ -143,31 +110,6 @@ advanced:
   type: bool
   help: "Do you want to see the advanced options?"
   default: true
-
-# ----------------------- Set up VPN ----------------------- #
-use_vpn:
-  type: bool
-  when: "{{ advanced }}"
-  help: "Do you want to use the VPN network in your algorithm?"
-  default: false
-
-vpn_expose:
-  type: json
-  when: "{{ advanced and use_vpn }}"
-  help: |
-    Configure the ports to expose in the VPN. You can add multiple ports
-    by adding more dictionaries with keys 'label' and 'port'.
-  default: [{'port': 8888, 'label': 'my_label'}]
-  multiline: true
-  validator: |
-    {% for port_dict in vpn_expose %}
-        {% if 'port' not in port_dict %}
-          Each dictionary should have a 'port' key.
-        {% endif %}
-        {% if 'label' not in port_dict %}
-          Each dictionary should have a 'label' key.
-        {% endif %}
-    {% endfor %}
 
 has_gh_pipeline:
   type: bool
@@ -219,7 +161,7 @@ _tasks:
   #   {% elif _copier_conf.os == 'windows' %}
   #     Remove-Item LICENSE
   #   {% endif %}
-  # TODO: similarly, delete if empty: central.py, partial.py
+  # TODO: similarly, delete if empty: central.py, federated.py
   # Call python script that cleans up
   - ["{{ _copier_python }}", cleanup.py]
 _message_after_copy: |

@@ -57,14 +57,14 @@ results = client.wait_for_results(central_task.get("id"))
 print(results)
 {% endif %}
 
-{% if has_partial_function %}
-# Run the partial method for all organizations
+{% if has_federated_function %}
+# Run the federated method for all organizations
 task = client.task.create(
     input_={
-        "method":"{{partial_function_name}}",
+        "method":"{{federated_function_name}}",
         "kwargs": {
             {% from 'macros/kwargs_definition.jinja' import kwargs_define %}
-            {{ kwargs_define(partial_function_name, partial_args, 3) }}
+            {{ kwargs_define(federated_function_name, federated_args, 3) }}
         }
     },
     organizations=org_ids

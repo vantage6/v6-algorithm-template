@@ -24,10 +24,12 @@ def cleanup() -> None:
         print("Removing LICENSE file as no license was chosen...")
         Path("LICENSE").unlink()
 
-    # Remove partial function files if partial function is not defined
-    if not copier_config.get("has_partial_function"):
-        print("Removing partial function file as partial function is not defined...")
-        Path(algorithm_name, "partial.py").unlink()
+    # Remove federated function files if federated function is not defined
+    if not copier_config.get("has_federated_function"):
+        print(
+            "Removing federated function file as federated function is not defined..."
+        )
+        Path(algorithm_name, "federated.py").unlink()
 
     # Remove central function files if central function is not defined
     if not copier_config.get("has_central_function"):
