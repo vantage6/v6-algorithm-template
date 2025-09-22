@@ -80,6 +80,56 @@ federated_args:
   default: ['arg1', ]
   multiline: true
 
+# ----------------------- Data extraction ------------------- #
+
+import_infra_extraction:
+  type: bool
+  help: "Do you want to make the default vantage6 data extraction functions available in your algorithm?"
+  default: true
+
+has_data_extraction:
+  type: bool
+  help: "Do you want to define your own data extraction function in your algorithm?"
+  default: true
+
+data_extraction_function_name:
+  type: str
+  when: "{{ has_data_extraction }}"
+  help: "What is the name of your data extraction function?"
+  default: data_extraction
+
+data_extraction_args:
+  type: json
+  when: "{{ has_data_extraction }}"
+  help: "Add a list of arguments to the data extraction function '{{ data_extraction_function_name }}'"
+  default: ['arg1', ]
+  multiline: true
+
+# ----------------------- Data preprocessing ------------------- #
+
+import_infra_preprocessing:
+  type: bool
+  help: "Do you want to make the default vantage6 data preprocessing functions available in your algorithm?"
+  default: true
+
+has_data_preprocessing:
+  type: bool
+  help: "Do you want to define your own data preprocessing function in your algorithm?"
+  default: true
+
+data_preprocessing_function_name:
+  type: str
+  when: "{{ has_data_preprocessing }}"
+  help: "What is the name of your data preprocessing function?"
+  default: data_preprocessing
+
+data_preprocessing_args:
+  type: json
+  when: "{{ has_data_preprocessing }}"
+  help: "Add a list of arguments to the data preprocessing function '{{ data_preprocessing_function_name }}'"
+  default: ['arg1', ]
+  multiline: true
+
 # ----------------------- Documentation --------------------- #
 
 has_docs:

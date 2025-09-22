@@ -14,7 +14,7 @@
 
 {# Data decorator #}
 {%- if num_dbs > 0 -%}
-@data({{num_dbs}})
+@dataframe({{num_dbs}})
 {% endif -%}
 {# Function definition #}
 def {{func_name}}(
@@ -22,11 +22,13 @@ def {{func_name}}(
 {# Add client argument #}
 {%- if func_type == "central_compute" %}
 client: AlgorithmClient
+{% elif func_type == "data_extraction" %}
+connection_details: dict
 {%- endif -%}
 {# Add data arguments #}
 {%- if num_dbs > 0 -%}
     {# Add comma if previous arguments exist #}
-    {%- if func_type == "central_compute" -%}
+    {%- if func_type == "central_compute" or func_type == "data_extraction" -%}
         ,{{" "}}
     {%- endif -%}
     {%- for db_num in range(num_dbs)-%}
@@ -39,7 +41,7 @@ client: AlgorithmClient
 {# Add additional arguments to function #}
 {%- if func_args %}
     {# Add comma if previous arguments exist #}
-    {%- if func_type == "central_compute" or num_dbs > 0 -%}
+    {%- if func_type == "central_compute" or func_type == "data_extraction" or num_dbs > 0 -%}
         ,{{" "}}
     {%- endif -%}
     {# Add arguments #}

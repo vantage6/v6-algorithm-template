@@ -13,3 +13,11 @@ from .central import *
 {%- if has_federated_function %}
 from .federated import *
 {% endif %}
+
+{% if has_data_extraction -%}
+from .extract import *
+{% endif %}
+
+{% if has_data_preprocessing -%}
+from .preprocess import *
+{% endif %}
