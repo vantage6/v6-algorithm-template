@@ -46,9 +46,9 @@ org_ids = [organization["id"] for organization in organizations]
 central_task = client.task.create(
     input_={
         "method":"{{central_function_name}}",
-        "kwargs": {
-            {% from 'macros/kwargs_definition.jinja' import kwargs_define %}
-            {{ kwargs_define(central_function_name, central_args, 3) }}
+        "arguments": {
+            {% from 'macros/arguments_definition.jinja' import arguments_define %}
+            {{ arguments_define(central_function_name, central_args, 3) }}
         }
     },
     organizations=[org_ids[0]],
@@ -62,9 +62,9 @@ print(results)
 task = client.task.create(
     input_={
         "method":"{{federated_function_name}}",
-        "kwargs": {
-            {% from 'macros/kwargs_definition.jinja' import kwargs_define %}
-            {{ kwargs_define(federated_function_name, federated_args, 3) }}
+        "arguments": {
+            {% from 'macros/arguments_definition.jinja' import arguments_define %}
+            {{ arguments_define(federated_function_name, federated_args, 3) }}
         }
     },
     organizations=org_ids

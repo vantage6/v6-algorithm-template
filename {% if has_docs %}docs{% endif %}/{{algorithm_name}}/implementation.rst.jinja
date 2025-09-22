@@ -25,3 +25,22 @@ executed in parallel on each node.
 .. Describe the function.
 
 {% endif %}
+{% if has_data_extraction %}
+Data extraction (``{{data_extraction_function_name}}``)
+--------------------------------
+The data extraction function is responsible for extracting data from the databases and
+storing it locally on the node, so that the data can be easily used in subsequent
+analyses.
+
+.. Describe the function.
+
+{% endif %}
+{% if has_data_preprocessing %}
+Data preprocessing (``{{data_preprocessing_function_name}}``)
+--------------------------------
+The data preprocessing function is responsible for preprocessing the data extracted from
+the databases.
+
+.. Describe the function.
+
+{% endif %}

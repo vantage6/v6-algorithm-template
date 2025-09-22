@@ -40,9 +40,9 @@ from vantage6.algorithm.client import AlgorithmClient
         # implemented in this repository)
         "method": "some_example_method",
         {% endif %}
-        "kwargs": {
-            {% from 'macros/kwargs_definition.jinja' import kwargs_define %}
-            {{ kwargs_define(federated_function_name, federated_args, 3) }}
+        "arguments": {
+            {% from 'macros/arguments_definition.jinja' import arguments_define %}
+            {{ arguments_define(federated_function_name, federated_args, 3) }}
         }
     }
 
