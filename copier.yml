@@ -30,7 +30,7 @@ central_function_name:
   type: str
   when: "{{ has_central_function }}"
   help: "What is the name of your central function?"
-  default: central
+  default: central_function
 
 central_args:
   type: json
@@ -50,7 +50,7 @@ federated_function_name:
   type: str
   when: "{{ has_federated_function }}"
   help: "What is the name of your federated function?"
-  default: federated
+  default: federated_function
 
 federated_function_data:
   type: bool
@@ -96,7 +96,7 @@ data_extraction_function_name:
   type: str
   when: "{{ has_data_extraction }}"
   help: "What is the name of your data extraction function?"
-  default: data_extraction
+  default: data_extraction_function
 
 data_extraction_args:
   type: json
@@ -121,7 +121,7 @@ data_preprocessing_function_name:
   type: str
   when: "{{ has_data_preprocessing }}"
   help: "What is the name of your data preprocessing function?"
-  default: data_preprocessing
+  default: data_preprocessing_function
 
 data_preprocessing_args:
   type: json

@@ -38,7 +38,9 @@ code for TODO instead of following the checklist below.
 {% endif %}
 - [ ] If you want to submit your algorithm to a vantage6 algorithm store, be sure
   to fill in everything in ``algorithm_store.json`` (and be sure to update
-  it if you change function names, arguments, etc.).
+  it if you change function names, arguments, etc.). It is recommended to run
+  ``v6 algorithm generate-algorithm-json`` to automatically generate the file - this
+  should work especially well if you have added proper docstrings to your functions.
 {% if has_gh_pipeline %}
 - [ ] Create a ``DOCKER_USER`` and ``DOCKER_PASSWORD`` secret in the GitHub repository
   settings. This will be used to push the Docker image to the registry in the github

@@ -6,10 +6,11 @@ databases. For instance, you can bin data into categories, or remove outliers.
 """
 {% if has_data_preprocessing -%}
 from typing import Any
+import pandas as pd
 
 from vantage6.algorithm.tools.util import info, warn, error
 from vantage6.algorithm.decorator.action import preprocessing
-from vantage6.algorithm.client import AlgorithmClient
+from vantage6.algorithm.decorator.data import dataframe
 
 {# Include the function definition from a macro. Note that preprocessing functions
    have one database. #}
@@ -24,8 +25,8 @@ from vantage6.algorithm.client import AlgorithmClient
     # TODO this is a simple example to show you how to write a data preprocessing function.
     # Replace it by your own code. Example adds a new BMI column based on height and
     # weight.
-    df["BMI"] = df["Weight"] / (df["Height"] ** 2)
-    return df
-{%- endif %}
+    df1["BMI"] = df1["Weight"] / (df1["Height"] ** 2)
+    return df1
+{% endif %}
 
 # TODO Feel free to add more data preprocessing functions here.

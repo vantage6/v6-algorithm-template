@@ -13,6 +13,7 @@ import pandas as pd
 from typing import Any
 
 from vantage6.algorithm.tools.util import info, warn, error
+from vantage6.algorithm.decorator.action import federated
     {% if federated_function_data %}
 from vantage6.algorithm.decorator.data import dataframe
     {% endif %}

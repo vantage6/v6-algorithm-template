@@ -6,11 +6,12 @@ vantage6 node. The extracted data are stored at the node and can then be used in
 subsequent analyses.
 """
 {% if has_data_extraction -%}
+import os
 from typing import Any
+import pandas as pd
 
 from vantage6.algorithm.tools.util import info, warn, error
 from vantage6.algorithm.decorator.action import data_extraction
-from vantage6.algorithm.client import AlgorithmClient
 
 {# Include the function definition from a macro #}
 {% from 'macros/function_definition.jinja' import func_def %}
@@ -49,6 +50,6 @@ from vantage6.algorithm.client import AlgorithmClient
 
     # Return results to the vantage6 server.
     return df
-{%- endif %}
+{% endif %}
 
 # TODO Feel free to add more data extraction functions here.

@@ -10,6 +10,7 @@ from typing import Any
 
 from vantage6.algorithm.tools.util import info, warn, error
 from vantage6.algorithm.decorator.algorithm_client import algorithm_client
+from vantage6.algorithm.decorator.action import central
 from vantage6.algorithm.client import AlgorithmClient
 
 
@@ -42,8 +43,7 @@ from vantage6.algorithm.client import AlgorithmClient
         {% endif %}
         "arguments": {
             {% from 'macros/arguments_definition.jinja' import arguments_define %}
-            {{ arguments_define(federated_function_name, federated_args, 3) }}
-        }
+            {{ arguments_define(federated_function_name, federated_args, 3) }}        }
     }
 
     # create a subtask for all organizations in the collaboration.
@@ -66,8 +66,6 @@ from vantage6.algorithm.client import AlgorithmClient
 
     # return the final results of the algorithm
     return results
-    {% endif %}
-
-{%- endif %}
+{% endif %}
 
 # TODO Feel free to add more central functions here.
