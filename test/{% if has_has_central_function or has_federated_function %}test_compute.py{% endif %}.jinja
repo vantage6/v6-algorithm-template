@@ -1,42 +1,45 @@
 """
-Run this script to test your algorithm locally (without building a Docker
-image) using the mock client.
+Run this script to test you compute function locally (without building a Docker image)
+using the mock client.
 
 Run as:
 
-    python test.py
+    python test_compute.py
 
 Make sure to do so in an environment where `vantage6-algorithm-tools` is
 installed. This can be done by running:
 
     pip install vantage6-algorithm-tools
 """
-from vantage6.algorithm.client.mock_client import MockAlgorithmClient
+import pandas as pd
+
+from vantage6.mock.network import MockNetwork
 from pathlib import Path
 
 # get path of current directory
 current_path = Path(__file__).parent
 
-## Mock client
-client = MockAlgorithmClient(
+# The MockNetwork expects a list of datasets. In this instance we are not interested in
+# extracting the data from its source. Therefore, we supply the data as a Pandas
+# dataframe avoiding the need to extract the data first
+data = pd.read_csv(current_path / "test_data.csv")
+DATABASE_LABEL = "default"
+network = MockNetwork(
     datasets=[
-        # Data for first organization
-        [{
-            "database": current_path / "test_data.csv",
-            "db_type": "csv",
-            "input_data": {}
-        }],
-        # Data for second organization
-        [{
-            "database": current_path / "test_data.csv",
-            "db_type": "csv",
-            "input_data": {}
-        }]
+        {
+            DATABASE_LABEL: {
+                "database": data,
+                "db_type": "csv",
+            }
+        }
     ],
-    module="{{algorithm_name}}"
+    module_name="{{algorithm_name}}"
 )
 
-# list mock organizations
+# Once the network is created, we can get the client to interact with the MockNetwork.
+client = network.user_client
+
+# List mock organizations
 organizations = client.organization.list()
 print(organizations)
 org_ids = [organization["id"] for organization in organizations]
