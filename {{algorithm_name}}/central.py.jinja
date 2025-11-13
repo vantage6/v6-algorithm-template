@@ -31,25 +31,19 @@ from vantage6.algorithm.client import AlgorithmClient
     organizations = client.organization.list()
     org_ids = [organization.get("id") for organization in organizations]
 
-    # Define input parameters for a subtask
-    info("Defining input parameters")
-    input_ = {
-        {% if has_federated_function %}
-        "method": "{{federated_function_name}}",
-        {% else %}
-        # TODO you should define a federated method here (which should also be
-        # implemented in this repository)
-        "method": "some_example_method",
-        {% endif %}
-        "arguments": {
-            {% from 'macros/arguments_definition.jinja' import arguments_define %}
-            {{ arguments_define(federated_function_name, federated_args, 3) }}        }
-    }
-
     # create a subtask for all organizations in the collaboration.
     info("Creating subtask for all organizations in the collaboration")
     task = client.task.create(
-        input_=input_,
+        {% if has_federated_function %}
+        method="{{federated_function_name}}",
+        {% else %}
+        # TODO you should define a federated method here (which should also be
+        # implemented in this repository)
+        method="some_example_method",
+        {% endif %}
+        arguments={
+            {% from 'macros/arguments_definition.jinja' import arguments_define %}
+            {{ arguments_define(federated_function_name, federated_args, 3) }}        },
         organizations=org_ids,
         name="My subtask",
         description="This is a very important subtask"
