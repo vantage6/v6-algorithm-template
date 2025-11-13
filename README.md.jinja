@@ -18,7 +18,8 @@ Please ensure to execute the following steps. The steps are also indicated with
 TODO statements in the generated code - so you can also simply search the
 code for TODO instead of following the checklist below.
 
-- [ ] Include a URL to your code repository in setup.py.
+- [ ] Fill out the fields in the `pyproject.toml` file, such as a URL to your code
+      repository. Alternatively, remove these fields.
 - [ ] Implement your algorithm functions.
   - [ ] You are free to add more arguments to the functions. Be sure to add them
     *after* the `client` and dataframe arguments.
@@ -26,8 +27,7 @@ code for TODO instead of following the checklist below.
     to include values for these arguments in the `client.task.create()` calls
     that are available there.
 - [ ] If you are using Python packages that are not in the standard library, add
-  them to the `pyproject.toml` file.
-- [ ] Fill out the fields in the `pyproject.toml` file.
+  them to the `pyproject.toml` file. Note that `pandas` is already included by default.
 {% if has_docs %}
 - [ ] Fill in the documentation template. This will help others to understand your
   algorithm, be able to use it safely, and to contribute to it.
@@ -39,8 +39,10 @@ code for TODO instead of following the checklist below.
 - [ ] If you want to submit your algorithm to a vantage6 algorithm store, be sure
   to fill in everything in ``algorithm_store.json`` (and be sure to update
   it if you change function names, arguments, etc.). It is recommended to run
-  ``v6 algorithm generate-algorithm-json`` to automatically generate the file - this
+  ``v6 algorithm generate-store-json`` to automatically generate the file - this
   should work especially well if you have added proper docstrings to your functions.
+  Note that you do need the `vantage6` CLI to be able to use this command, which can be
+  installed by e.g. running `pip install vantage6` (or `uv pip install vantage6`).
 {% if has_gh_pipeline %}
 - [ ] Create a ``DOCKER_USER`` and ``DOCKER_PASSWORD`` secret in the GitHub repository
   settings. This will be used to push the Docker image to the registry in the github

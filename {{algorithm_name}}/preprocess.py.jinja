@@ -10,14 +10,13 @@ import pandas as pd
 
 from vantage6.algorithm.tools.util import info, warn, error
 from vantage6.algorithm.decorator.action import preprocessing
-from vantage6.algorithm.decorator.data import dataframe
 
 {# Include the function definition from a macro. Note that preprocessing functions
    have one database. #}
 {% from 'macros/function_definition.jinja' import func_def %}
 {{
     func_def(
-        data_preprocessing_function_name, "preprocessing", 0, data_preprocessing_args,
+        data_preprocessing_function_name, "preprocessing", 1, data_preprocessing_args,
     )
 }}
 {# Implementation of data preprocessing algorithm #}

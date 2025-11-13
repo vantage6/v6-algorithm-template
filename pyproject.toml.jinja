@@ -9,7 +9,7 @@ description = "{{algorithm_description}}"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-  "vantage6-algorithm-tools",
+  "vantage6-algorithm-tools>=5.0.0a43",
   "pandas",
 ]
 authors = [
@@ -34,3 +34,6 @@ classifiers = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["{{algorithm_name}}"]
+
+[tool.uv]
+prereleases = "allow"

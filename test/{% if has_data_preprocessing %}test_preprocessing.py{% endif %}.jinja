@@ -43,7 +43,7 @@ client = network.user_client
 organizations = client.organization.list()
 print(organizations)
 org_ids = [organization["id"] for organization in organizations]
-
+{#
 # Run the data extraction function
 # TODO the MockNetwork has not yet implemented the preprocessing interface
 # task = client.task.create(
@@ -62,4 +62,4 @@ org_ids = [organization["id"] for organization in organizations]
 
 # TODO implement checking the dataframe that has been created at the node:
 # for node in network.nodes:
-#     print(node.dataframes)
+#     print(node.dataframes) #}

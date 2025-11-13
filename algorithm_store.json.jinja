@@ -1,7 +1,7 @@
 {
   "name": "{{algorithm_name}}",
   "image": "{{docker_image}}",
-  "vantage6_version": "4.6",
+  "vantage6_version": "5.0",
   "code_url": "https://mygitrepo.org",
   "documentation_url": "",
   "partitioning": "horizontal",
@@ -10,17 +10,12 @@
     {
       "name": "{{central_function_name}}",
       "description": "{{algorithm_description}}",
-      "type": "central",
+      "step_type": "central_compute",
       "databases": [
         {%- for idx in range(federated_function_number_databases) -%}
           {
           "name": "Central database {{idx + 1}}"
           }{%- if not loop.last or federated_function_number_databases > 0 -%},{%- endif -%}
-        {% endfor %}
-        {% for idx in range(federated_function_number_databases) %}
-        {
-        "name": "Central database {{idx + 1}}"
-        }{%- if not loop.last -%},{%- endif -%}
         {% endfor %}
       ],
       "arguments": [
@@ -38,7 +33,7 @@
     {
       "name": "{{federated_function_name}}",
       "description": "",
-      "type": "federated",
+      "step_type": "federated_compute",
       "databases": [
         {%- for idx in range(federated_function_number_databases) -%}
           {
