@@ -24,9 +24,24 @@ current_path = Path(__file__).parent
 DATABASE_LABEL = "default"
 network = MockNetwork(
     datasets=[
-        {DATABASE_LABEL: {"database": current_path / "test_data.csv"}},
-        {DATABASE_LABEL: {"database": current_path / "test_data.csv"}},
-        {DATABASE_LABEL: {"database": current_path / "test_data.csv"}},
+        {
+            DATABASE_LABEL: {
+                "database": current_path / "test_data.csv",
+                "db_type": "csv",
+            },
+        },
+        {
+            DATABASE_LABEL: {
+                "database": current_path / "test_data.csv",
+                "db_type": "csv",
+            },
+        },
+        {
+            DATABASE_LABEL: {
+                "database": current_path / "test_data.csv",
+                "db_type": "csv",
+            },
+        },
     ],
     module_name="{{algorithm_name}}"
 )
@@ -40,20 +55,21 @@ print(organizations)
 org_ids = [organization["id"] for organization in organizations]
 
 # Run the data extraction function
-task = client.task.create(
+task = client.dataframe.create(
     method="{{data_extraction_function_name}}",
     arguments={
         {% from 'macros/arguments_definition.jinja' import arguments_define %}
         {{ arguments_define(data_extraction_function_name, data_extraction_args, 2) }}
     },
     organizations=org_ids,
-    databases=[{"label": DATABASE_LABEL}],
+    label=DATABASE_LABEL,
 )
 
 # Wait for the task to complete
 results = client.wait_for_results(task.get("id"))
-print(results)
+print("results:", results)
 
 {# TODO implement checking the dataframe that has been created at the node: #}
+print("dataframes:")
 for node in network.nodes:
     print(node.dataframes)
