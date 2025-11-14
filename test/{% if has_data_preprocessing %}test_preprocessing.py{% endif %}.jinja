@@ -26,12 +26,9 @@ data = pd.read_csv(current_path / "test_data.csv")
 DATABASE_LABEL = "default"
 network = MockNetwork(
     datasets=[
-        {
-            DATABASE_LABEL: {
-                "database": data,
-                "db_type": "csv",
-            }
-        }
+        {DATABASE_LABEL: {"database": data}},
+        {DATABASE_LABEL: {"database": data}},
+        {DATABASE_LABEL: {"database": data}},
     ],
     module_name="{{algorithm_name}}"
 )
