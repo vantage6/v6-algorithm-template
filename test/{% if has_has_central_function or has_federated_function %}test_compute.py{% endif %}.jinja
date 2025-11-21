@@ -52,6 +52,9 @@ central_task = client.task.create(
         {{ arguments_define(central_function_name, central_args, 2) }}
     },
     organizations=[org_ids[0]],
+    databases=[
+        {"type": "dataframe", "dataframe_id": network.server.dataframes[0]["id"]}
+    ],
 )
 results = client.wait_for_results(central_task.get("id"))
 print(results)
@@ -64,7 +67,10 @@ task = client.task.create(
     arguments={
         {% from 'macros/arguments_definition.jinja' import arguments_define %}
         {{ arguments_define(federated_function_name, federated_args, 2) }}    },
-    organizations=org_ids
+    organizations=org_ids,
+    databases=[
+        {"type": "dataframe", "dataframe_id": network.server.dataframes[0]["id"]}
+    ],
 )
 print(task)
 
