@@ -190,7 +190,7 @@ docker_registry:
   type: str
   when: "{{ advanced and has_gh_pipeline and private_registry }}"
   help: "The Docker registry to use for the GitHub Actions pipeline"
-  default: harbor2.vantage6.ai
+  default: ghcr.io/vantage6
 
 docker_image:
   type: str
