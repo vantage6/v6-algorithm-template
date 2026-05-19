@@ -187,12 +187,12 @@ docker_registry:
 docker_image:
   type: str
   when: "{{ advanced and has_gh_pipeline }}"
-  help: "The Docker image name to use for the GitHub Actions pipeline"
+  help: "Full Docker image name without tag (e.g. ghcr.io/myorg/algorithm/my-algo), used by the release workflow and Makefile"
   default: |-
     {%- if private_registry -%}
       {{docker_registry}}/{{algorithm_name}}
     {%- else -%}
-      {{algorithm_name}}
+      ghcr.io/vantage6/algorithm/{{algorithm_name}}
     {%- endif -%}
 
 # ----------------------- Copier metadata ------------------ #

@@ -44,9 +44,13 @@ code for TODO instead of following the checklist below.
   Note that you do need the `vantage6` CLI to be able to use this command, which can be
   installed by e.g. running `pip install vantage6` (or `uv pip install vantage6`).
 {% if has_gh_pipeline %}
-- [ ] Create a ``DOCKER_USER`` and ``DOCKER_PASSWORD`` secret in the GitHub repository
-  settings. This will be used to push the Docker image to the registry in the github
-  pipeline.
+- [ ] Ensure the GitHub repository can publish packages (for ``ghcr.io``, grant
+  ``packages: write`` — the reusable workflow does this; you need a ``GITHUB_TOKEN``
+  with appropriate permissions, which is the default for Actions). Alternatively, you
+  can create your own custom GitHub Actions workflow file.
+- [ ] If you use a registry other than GitHub Container Registry, add a repository
+  secret named ``registry_password`` for login (the reusable workflow uses
+  ``secrets: inherit``). For GHCR with the default token, no extra secret is required.
 {% endif %}
 - [ ] Finally, remove this checklist section to keep the README clean.
 
@@ -58,15 +62,27 @@ create a Docker image of your algorithm.
 {% if has_gh_pipeline %}
 #### Automatically
 
-The easiest way to create a Docker image is to use the GitHub Actions pipeline to
-automatically build and push the Docker image. All that you need to do is push a
-commit to the ``main`` branch.
-
-#### Manually
+The repository includes a release workflow that calls
+``vantage6/vantage6-workflows`` (``algorithm-release.yml``). Push a
+**semantic version tag** (``x.y.z`` or with a prerelease suffix) to trigger a build;
+the workflow runs ``make image`` with the correct tags and pushes to your configured
+image name.
 
 {% endif %}
-A Docker image can be created by executing the following command in the root of your
-algorithm directory:
+#### Manually via ``make``
+
+You can build (and optionally push) locally:
+
+```bash
+make image
+# or with push:
+make image PUSH_REG=true TAG=1.0.0 VANTAGE6_VERSION=5.0.0
+```
+
+#### Manually via ``docker``
+
+Alternatively, a Docker image can be created by executing the following command in the
+root of your algorithm directory:
 
 ```bash
 docker build -t [my_docker_image_name] .
