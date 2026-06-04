@@ -6,34 +6,23 @@ The results in a return statement are sent to the vantage6 server (after
 encryption if that is enabled).
 """
 {% if has_central_function -%}
-    {% if central_function_data -%}
-    import pandas as pd
-    {% endif %}
 from typing import Any
 
 from vantage6.algorithm.tools.util import info, warn, error
-    {% if central_function_client %}
-from vantage6.algorithm.tools.decorators import algorithm_client
-    {% endif %}
-    {% if central_function_data %}
-from vantage6.algorithm.tools.decorators import data
-    {% endif %}
-    {% if central_function_client %}
+from vantage6.algorithm.decorator.algorithm_client import algorithm_client
+from vantage6.algorithm.decorator.action import central
 from vantage6.algorithm.client import AlgorithmClient
-    {% endif %}
 
 
 {# Include the function definition from a macro #}
 {% from 'macros/function_definition.jinja' import func_def %}
 {{
     func_def(
-        central_function_name, central_function_data, central_function_client,
-        central_function_number_databases, central_args
+        central_function_name, "central_compute", 0, central_args,
     )
 }}
     {# Implementation of the algorithm #}
     """ Central part of the algorithm """
-    {% if central_function_client %}
     # TODO implement this function. Below is an example of a simple but typical
     # central function.
 
@@ -42,50 +31,23 @@ from vantage6.algorithm.client import AlgorithmClient
     organizations = client.organization.list()
     org_ids = [organization.get("id") for organization in organizations]
 
-    # Define input parameters for a subtask
-    info("Defining input parameters")
-    input_ = {
-        {% if has_partial_function %}
-        "method": "{{partial_function_name}}",
-        {% else %}
-        # TODO you should define a federated method here (which should also be
-        # implemented in this repository)
-        "method": "some_example_method",
-        {% endif %}
-        "kwargs": {
-            {% from 'macros/kwargs_definition.jinja' import kwargs_define %}
-            {{ kwargs_define(partial_function_name, partial_args, 3) }}
-        }
-    }
-
     # create a subtask for all organizations in the collaboration.
     info("Creating subtask for all organizations in the collaboration")
     task = client.task.create(
-        input_=input_,
+        {% if has_federated_function %}
+        method="{{federated_function_name}}",
+        {% else %}
+        # TODO you should define a federated method here (which should also be
+        # implemented in this repository)
+        method="some_example_method",
+        {% endif %}
+        arguments={
+            {% from 'macros/arguments_definition.jinja' import arguments_define %}
+            {{ arguments_define(federated_function_name, federated_args, 3) }}        },
         organizations=org_ids,
         name="My subtask",
         description="This is a very important subtask"
     )
-
-        {% if use_vpn %}
-    # To communicate over the VPN network, get VPN addresses of the subtasks
-    vpn_addresses = client.vpn.get_child_addresses()
-    # Note that you can also use client.vpn.get_addresses() to not only get the
-    # subtasks.
-    # The variable `vpn_addresses` will be something like:
-    # {
-    #    [
-    #        'ip': '1.2.3.4',
-    #        'port': 5678,
-    #        'label': 'label_defined_in_dockerfile',
-    #        'organization_id': 1,
-    #        'task_id': 1, (task id of the subtask)
-    #        'parent_id': 1, (task id of this central task)
-    #    ], ... (one for each algorithm container)
-    # }
-    # Use the `ip` and `port` to communicate with the subtasks.
-    # TODO write your own code here to communicate with the subtasks.
-        {% endif %}
 
     # wait for node to return results of the subtask.
     info("Waiting for results")
@@ -98,11 +60,6 @@ from vantage6.algorithm.client import AlgorithmClient
 
     # return the final results of the algorithm
     return results
-    {% else %}
-    # TODO write your own code here
-    return {'my_results': 'some_value'}
-    {% endif %}
-
-{%- endif %}
+{% endif %}
 
 # TODO Feel free to add more central functions here.

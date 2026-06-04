@@ -12,16 +12,35 @@ The central part is responsible for the orchestration and aggregation of the alg
 .. Describe the central function here.
 
 {% endif %}
-{% if has_partial_function %}
-Partials
+{% if has_federated_function %}
+Federated functions
 --------
-Partials are the computations that are executed on each node. The partials have access
-to the data that is stored on the node. The partials are executed in parallel on each
-node.
+Federated functions are the computations that are executed on each node. The federated
+functions have access to the data that is stored on the node. These functions are
+executed in parallel on each node.
 
-``{{partial_function_name}}``
+``{{federated_function_name}}``
 ~~~~~~~~~~~~~~~~
 
-.. Describe the partial function.
+.. Describe the function.
+
+{% endif %}
+{% if has_data_extraction %}
+Data extraction (``{{data_extraction_function_name}}``)
+--------------------------------
+The data extraction function is responsible for extracting data from the databases and
+storing it locally on the node, so that the data can be easily used in subsequent
+analyses.
+
+.. Describe the function.
+
+{% endif %}
+{% if has_data_preprocessing %}
+Data preprocessing (``{{data_preprocessing_function_name}}``)
+--------------------------------
+The data preprocessing function is responsible for preprocessing the data extracted from
+the databases.
+
+.. Describe the function.
 
 {% endif %}

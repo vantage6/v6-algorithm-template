@@ -18,7 +18,8 @@ Please ensure to execute the following steps. The steps are also indicated with
 TODO statements in the generated code - so you can also simply search the
 code for TODO instead of following the checklist below.
 
-- [ ] Include a URL to your code repository in setup.py.
+- [ ] Fill out the fields in the `pyproject.toml` file, such as a URL to your code
+      repository. Alternatively, remove these fields.
 - [ ] Implement your algorithm functions.
   - [ ] You are free to add more arguments to the functions. Be sure to add them
     *after* the `client` and dataframe arguments.
@@ -26,7 +27,7 @@ code for TODO instead of following the checklist below.
     to include values for these arguments in the `client.task.create()` calls
     that are available there.
 - [ ] If you are using Python packages that are not in the standard library, add
-  them to the `requirements.txt` and `setup.py` file.
+  them to the `pyproject.toml` file. Note that `pandas` is already included by default.
 {% if has_docs %}
 - [ ] Fill in the documentation template. This will help others to understand your
   algorithm, be able to use it safely, and to contribute to it.
@@ -37,14 +38,19 @@ code for TODO instead of following the checklist below.
 {% endif %}
 - [ ] If you want to submit your algorithm to a vantage6 algorithm store, be sure
   to fill in everything in ``algorithm_store.json`` (and be sure to update
-  it if you change function names, arguments, etc.).
+  it if you change function names, arguments, etc.). It is recommended to run
+  ``v6 algorithm generate-store-json`` to automatically generate the file - this
+  should work especially well if you have added proper docstrings to your functions.
+  Note that you do need the `vantage6` CLI to be able to use this command, which can be
+  installed by e.g. running `pip install vantage6` (or `uv pip install vantage6`).
 {% if has_gh_pipeline %}
-- [ ] Create a ``DOCKER_USER`` and ``DOCKER_PASSWORD`` secret in the GitHub repository
-  settings. This will be used to push the Docker image to the registry in the github
-  pipeline.
-{% endif %}
-{% if use_vpn %}
-- [ ] Review the EXPOSE and LABEL commands in the Dockerfile for VPN
+- [ ] Ensure the GitHub repository can publish packages (for ``ghcr.io``, grant
+  ``packages: write`` — the reusable workflow does this; you need a ``GITHUB_TOKEN``
+  with appropriate permissions, which is the default for Actions). Alternatively, you
+  can create your own custom GitHub Actions workflow file.
+- [ ] If you use a registry other than GitHub Container Registry, add a repository
+  secret named ``registry_password`` for login (the reusable workflow uses
+  ``secrets: inherit``). For GHCR with the default token, no extra secret is required.
 {% endif %}
 - [ ] Finally, remove this checklist section to keep the README clean.
 
@@ -56,15 +62,27 @@ create a Docker image of your algorithm.
 {% if has_gh_pipeline %}
 #### Automatically
 
-The easiest way to create a Docker image is to use the GitHub Actions pipeline to
-automatically build and push the Docker image. All that you need to do is push a
-commit to the ``main`` branch.
-
-#### Manually
+The repository includes a release workflow that calls
+``vantage6/vantage6-workflows`` (``algorithm-release.yml``). Push a
+**semantic version tag** (``x.y.z`` or with a prerelease suffix) to trigger a build;
+the workflow runs ``make image`` with the correct tags and pushes to your configured
+image name.
 
 {% endif %}
-A Docker image can be created by executing the following command in the root of your
-algorithm directory:
+#### Manually via ``make``
+
+You can build (and optionally push) locally:
+
+```bash
+make image
+# or with push:
+make image PUSH_REG=true TAG=1.0.0 VANTAGE6_VERSION=5.0.0
+```
+
+#### Manually via ``docker``
+
+Alternatively, a Docker image can be created by executing the following command in the
+root of your algorithm directory:
 
 ```bash
 docker build -t [my_docker_image_name] .
@@ -81,7 +99,7 @@ docker tag [my_docker_image_name] [another_image_name]
 This way, you can e.g. do
 `docker tag local_average_algorithm ghcr.io/vantage6/algorithm/average` to
 make the algorithm available on a remote Docker registry (in this case
-`ghcr.io/vantage6`).
+`ghcr.io`).
 
 Finally, you need to push the image to the Docker registry. This can be done
 by running

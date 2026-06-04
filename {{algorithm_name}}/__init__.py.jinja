@@ -1,7 +1,23 @@
+{% if import_infra_extraction -%}
+from vantage6.algorithm.data_extraction import *
+{% endif %}
+
+{%- if import_infra_preprocessing -%}
+from vantage6.algorithm.preprocessing import *
+{% endif %}
+
 {% if has_central_function -%}
 from .central import *
 {% endif %}
 
-{%- if has_partial_function %}
-from .partial import *
+{%- if has_federated_function %}
+from .federated import *
+{% endif %}
+
+{%- if has_data_extraction -%}
+from .extract import *
+{% endif %}
+
+{%- if has_data_preprocessing -%}
+from .preprocess import *
 {% endif %}

@@ -1,7 +1,7 @@
 {
   "name": "{{algorithm_name}}",
   "image": "{{docker_image}}",
-  "vantage6_version": "4.6",
+  "vantage6_version": "5.0",
   "code_url": "https://mygitrepo.org",
   "documentation_url": "",
   "partitioning": "horizontal",
@@ -10,17 +10,12 @@
     {
       "name": "{{central_function_name}}",
       "description": "{{algorithm_description}}",
-      "type": "central",
+      "step_type": "central_compute",
       "databases": [
-        {%- for idx in range(partial_function_number_databases) -%}
+        {%- for idx in range(federated_function_number_databases) -%}
           {
-          "name": "Partial database {{idx + 1}}"
-          }{%- if not loop.last or central_function_number_databases > 0 -%},{%- endif -%}
-        {% endfor %}
-        {% for idx in range(central_function_number_databases) %}
-        {
-        "name": "Central database {{idx + 1}}"
-        }{%- if not loop.last -%},{%- endif -%}
+          "name": "Central database {{idx + 1}}"
+          }{%- if not loop.last or federated_function_number_databases > 0 -%},{%- endif -%}
         {% endfor %}
       ],
       "arguments": [
@@ -33,21 +28,21 @@
         {% endfor %}
       ]
     }{%- endif -%}
-    {%- if has_central_function and has_partial_function -%},{%- endif -%}
-    {% if has_partial_function -%}
+    {%- if has_central_function and has_federated_function -%},{%- endif -%}
+    {% if has_federated_function -%}
     {
-      "name": "{{partial_function_name}}",
+      "name": "{{federated_function_name}}",
       "description": "",
-      "type": "federated",
+      "step_type": "federated_compute",
       "databases": [
-        {%- for idx in range(partial_function_number_databases) -%}
+        {%- for idx in range(federated_function_number_databases) -%}
           {
           "name": "Database {{idx + 1}}"
           }{%- if not loop.last -%},{%- endif -%}
         {% endfor %}
       ],
       "arguments": [
-        {%- for arg in partial_args -%}
+        {%- for arg in federated_args -%}
         {
           "name": "{{arg}}",
           "type": "",

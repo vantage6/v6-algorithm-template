@@ -1,25 +1,32 @@
-{% macro func_def(func_name, data_decorator, client_decorator, num_dbs,
-                  func_args) %}
-{# Data decorator #}
-{% if data_decorator -%}
-@data({{num_dbs}})
-{% endif -%}
-
-{# Algorithm client decorator #}
-{%- if client_decorator -%}
+{% macro func_def(func_name, func_type, num_dbs, func_args) %}
+{# Function type decorator #}
+{% if func_type == "central_compute" -%}
+@central
 @algorithm_client
+{% elif func_type == "federated_compute" -%}
+@federated
+{% elif func_type == "preprocessing" -%}
+@preprocessing
+{% elif func_type == "data_extraction" -%}
+@data_extraction
+{% endif -%}
+{# Data decorator #}
+{%- if num_dbs > 0 and func_type != "preprocessing" -%}
+@dataframe({{num_dbs}})
 {% endif -%}
 {# Function definition #}
 def {{func_name}}(
 {{"    "}}{# <- Add 4 whitespaces before function args start  #}
 {# Add client argument #}
-{%- if client_decorator %}
+{%- if func_type == "central_compute" -%}
 client: AlgorithmClient
+{%- elif func_type == "data_extraction" -%}
+connection_details: dict
 {%- endif -%}
 {# Add data arguments #}
-{%- if data_decorator -%}
+{%- if num_dbs > 0 -%}
     {# Add comma if previous arguments exist #}
-    {%- if client_decorator -%}
+    {%- if func_type == "central_compute" or func_type == "data_extraction" -%}
         ,{{" "}}
     {%- endif -%}
     {%- for db_num in range(num_dbs)-%}
@@ -32,7 +39,7 @@ client: AlgorithmClient
 {# Add additional arguments to function #}
 {%- if func_args %}
     {# Add comma if previous arguments exist #}
-    {%- if client_decorator or data_decorator -%}
+    {%- if func_type == "central_compute" or func_type == "data_extraction" or num_dbs > 0 -%}
         ,{{" "}}
     {%- endif -%}
     {# Add arguments #}
@@ -46,4 +53,4 @@ client: AlgorithmClient
 
     {# Finalize function definition #}
 ) -> Any:
-{% endmacro %}
+{%- endmacro -%}
