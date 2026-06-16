@@ -23,9 +23,10 @@ code for TODO instead of following the checklist below.
 - [ ] Implement your algorithm functions.
   - [ ] You are free to add more arguments to the functions. Be sure to add them
     *after* the `client` and dataframe arguments.
-  - [ ] When adding new arguments, if you run the `test/test.py` script, be sure
-    to include values for these arguments in the `client.task.create()` calls
-    that are available there.
+  - [ ] When adding new arguments, update the argument values in the test scripts
+    under ``test/`` (for example ``test/test_compute.py``).
+  - [ ] Run local tests with MockNetwork: ``uv sync --group dev`` then
+    ``uv run python test/test_compute.py`` (or the extraction/preprocessing script).
 - [ ] If you are using Python packages that are not in the standard library, add
   them to the `pyproject.toml` file. Note that `pandas` is already included by default.
 {% if has_docs %}

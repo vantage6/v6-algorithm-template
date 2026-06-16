@@ -34,3 +34,8 @@ classifiers = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["{{algorithm_name}}"]
+
+[dependency-groups]
+dev = [
+  "pytest",
+]
